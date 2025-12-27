@@ -130,7 +130,8 @@ if __name__ == "__main__":
     )
     eval_samples = 100
     train_dataset = dataset.select(range(len(dataset) - eval_samples))
-    eval_dataset = dataset.select(range(len(dataset) - eval_samples, len(dataset)))
+    # eval_dataset = dataset.select(range(len(dataset) - eval_samples, len(dataset)))
+    eval_dataset = None
     dataset_text_field = "prompt"
 
     def prepare_dataset(dataset, tokenizer):
@@ -154,7 +155,7 @@ if __name__ == "__main__":
     # see: https://github.com/huggingface/trl/pull/1255
     with PartialState().local_main_process_first():
         train_dataset = prepare_dataset(train_dataset, tokenizer)
-        eval_dataset = prepare_dataset(eval_dataset, tokenizer)
+        # eval_dataset = prepare_dataset(eval_dataset, tokenizer)
 
     ################
     # Training
@@ -167,7 +168,7 @@ if __name__ == "__main__":
         reward_model=reward_model,
         value_model=value_model,
         train_dataset=train_dataset,
-        eval_dataset=eval_dataset,
+        eval_dataset=None,
         peft_config=peft_config,
     )
     trainer.train()
